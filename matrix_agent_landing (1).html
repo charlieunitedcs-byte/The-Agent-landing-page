@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE AGENT | Think ALM</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;700&family=Orbitron:wght@400;700;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: linear-gradient(135deg, #0a1628 0%, #050a14 100%);
+            color: #e0e0e0;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+        
+        /* Animated grid background */
+        .grid-bg {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 212, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 212, 255, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+            z-index: 1;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+        
+        /* Floating particles */
+        .particle {
+            position: fixed;
+            width: 3px;
+            height: 3px;
+            background: rgba(0, 255, 255, 0.7);
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+            animation: float 4s infinite ease-in-out;
+            z-index: 1;
+        }
+
+        @keyframes float {
+            0%, 100% { 
+                transform: translateY(0) translateX(0); 
+                opacity: 0; 
+            }
+            50% { 
+                opacity: 1; 
+            }
+        }
+        
+        /* Content Wrapper */
+        .content {
+            position: relative;
+            z-index: 3;
+        }
+        
+        /* Navigation */
+        nav {
+            padding: 2rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+        
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #80c0ff;
+            text-shadow: 0 0 20px rgba(0, 212, 255, 0.6);
+            letter-spacing: 3px;
+        }
+        
+        .nav-links a {
+            color: #80c0ff;
+            text-decoration: none;
+            margin-left: 2rem;
+            transition: all 0.3s;
+            font-size: 1rem;
+            font-weight: 400;
+        }
+        
+        .nav-links a:hover {
+            color: #00d4ff;
+            text-shadow: 0 0 15px rgba(0, 212, 255, 0.8);
+        }
+        
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem 5%;
+            position: relative;
+        }
+        
+        /* Energy rings container */
+        .rings-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            pointer-events: none;
+        }
+        
+        .energy-ring {
+            position: absolute;
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .ring1 {
+            width: 600px;
+            height: 600px;
+            animation: rotate 25s linear infinite;
+        }
+
+        .ring2 {
+            width: 450px;
+            height: 450px;
+            border-style: dashed;
+            border-width: 1.5px;
+            animation: rotate 18s linear infinite reverse;
+        }
+
+        .ring3 {
+            width: 320px;
+            height: 320px;
+            border-color: rgba(0, 255, 255, 0.4);
+            animation: rotate 15s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        
+        /* Central hexagon */
+        .hexagon {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .hexagon::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 255, 255, 0.2);
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            animation: hexPulse 3s infinite ease-in-out;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.6);
+        }
+
+        @keyframes hexPulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 1; }
+        }
+        
+        /* Main logo styling */
+        .hero-logo {
+            margin-bottom: 3rem;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .the-text {
+            font-size: 2.5rem;
+            font-weight: 300;
+            letter-spacing: 8px;
+            color: rgba(128, 222, 234, 0.8);
+            margin-bottom: 5px;
+            text-transform: lowercase;
+        }
+        
+        .agent-main {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 8rem;
+            font-weight: 900;
+            letter-spacing: 18px;
+            color: #fff;
+            text-shadow: 
+                0 0 20px rgba(0, 212, 255, 0.9),
+                0 0 40px rgba(0, 212, 255, 0.6),
+                0 0 60px rgba(0, 212, 255, 0.4),
+                0 0 80px rgba(0, 212, 255, 0.2);
+            position: relative;
+            animation: textPulse 3s infinite ease-in-out;
+            margin: 10px 0;
+        }
+
+        @keyframes textPulse {
+            0%, 100% { 
+                text-shadow: 
+                    0 0 20px rgba(0, 212, 255, 0.9),
+                    0 0 40px rgba(0, 212, 255, 0.6),
+                    0 0 60px rgba(0, 212, 255, 0.4),
+                    0 0 80px rgba(0, 212, 255, 0.2);
+            }
+            50% { 
+                text-shadow: 
+                    0 0 30px rgba(0, 255, 255, 1),
+                    0 0 60px rgba(0, 255, 255, 0.8),
+                    0 0 90px rgba(0, 255, 255, 0.6),
+                    0 0 120px rgba(0, 255, 255, 0.4);
+            }
+        }
+        
+        /* Glitch effect */
+        .agent-main::before,
+        .agent-main::after {
+            content: 'AGENT';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            letter-spacing: 18px;
+        }
+
+        .agent-main::before {
+            animation: glitch1 2.5s infinite;
+            color: #00d4ff;
+            z-index: -1;
+        }
+
+        .agent-main::after {
+            animation: glitch2 2.5s infinite;
+            color: #00ffaa;
+            z-index: -2;
+        }
+
+        @keyframes glitch1 {
+            0%, 100% { transform: translate(0); opacity: 0.7; }
+            33% { transform: translate(-3px, 2px); opacity: 0.7; }
+            66% { transform: translate(3px, -2px); opacity: 0.7; }
+        }
+
+        @keyframes glitch2 {
+            0%, 100% { transform: translate(0); opacity: 0.7; }
+            33% { transform: translate(2px, -3px); opacity: 0.7; }
+            66% { transform: translate(-2px, 3px); opacity: 0.7; }
+        }
+        
+        .by-think {
+            font-size: 1.5rem;
+            letter-spacing: 6px;
+            color: #80c0ff;
+            font-weight: 300;
+            text-transform: uppercase;
+            opacity: 0.85;
+        }
+        
+        .tagline {
+            font-size: 1.8rem;
+            color: #80c0ff;
+            margin: 2rem 0 1rem;
+            font-weight: 300;
+            max-width: 700px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: rgba(128, 192, 255, 0.7);
+            margin-bottom: 3rem;
+            max-width: 600px;
+            line-height: 1.8;
+        }
+        
+        .cta-button {
+            background: linear-gradient(135deg, #00d4ff 0%, #0088cc 100%);
+            color: #fff;
+            padding: 1.2rem 3rem;
+            font-size: 1.2rem;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            font-family: 'Orbitron', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.5);
+            transition: all 0.3s;
+            border-radius: 5px;
+        }
+        
+        .cta-button:hover {
+            box-shadow: 0 0 50px rgba(0, 212, 255, 0.8);
+            transform: scale(1.05);
+        }
+        
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+        
+        @keyframes shine {
+            0% { left: -50%; }
+            100% { left: 150%; }
+        }
+        
+        /* Terminal Demo */
+        .terminal-demo {
+            background: rgba(10, 22, 40, 0.8);
+            border: 2px solid #00d4ff;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 3rem auto;
+            max-width: 800px;
+            box-shadow: 0 0 50px rgba(0, 212, 255, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        
+        .terminal-header {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(0, 212, 255, 0.3);
+        }
+        
+        .terminal-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #00d4ff;
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.8);
+        }
+        
+        .terminal-content {
+            font-family: 'Rajdhani', monospace;
+            font-size: 1rem;
+            color: #00d4ff;
+        }
+        
+        .terminal-line {
+            margin: 0.5rem 0;
+        }
+        
+        .terminal-prompt {
+            color: #00ffaa;
+        }
+        
+        /* Sections */
+        .section {
+            padding: 5rem 5%;
+            position: relative;
+        }
+        
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3.5rem;
+            color: #00d4ff;
+            text-align: center;
+            margin-bottom: 3rem;
+            text-shadow: 0 0 20px rgba(0, 212, 255, 0.6);
+            font-weight: 700;
+        }
+        
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .feature-card {
+            background: rgba(10, 22, 40, 0.6);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 10px;
+            padding: 2rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #00d4ff, transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s;
+        }
+        
+        .feature-card:hover::before {
+            transform: translateX(100%);
+        }
+        
+        .feature-card:hover {
+            border-color: #00d4ff;
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+            transform: translateY(-5px);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.6));
+        }
+        
+        .feature-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            color: #00d4ff;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+        
+        .feature-desc {
+            color: #b0c4d8;
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+        
+        /* Scanline effect */
+        .scanline {
+            position: fixed;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #00d4ff, transparent);
+            animation: scan 4s linear infinite;
+            opacity: 0.3;
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.8);
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        @keyframes scan {
+            0% { top: 0; }
+            100% { top: 100%; }
+        }
+        
+        /* Corner brackets */
+        .corner {
+            position: fixed;
+            width: 40px;
+            height: 40px;
+            border: 3px solid #00d4ff;
+            opacity: 0.4;
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.5);
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .corner.tl { top: 20px; left: 20px; border-right: none; border-bottom: none; }
+        .corner.tr { top: 20px; right: 20px; border-left: none; border-bottom: none; }
+        .corner.bl { bottom: 20px; left: 20px; border-right: none; border-top: none; }
+        .corner.br { bottom: 20px; right: 20px; border-left: none; border-top: none; }
+        
+        /* Footer */
+        footer {
+            padding: 3rem 5%;
+            text-align: center;
+            border-top: 1px solid rgba(0, 212, 255, 0.2);
+            color: #80c0ff;
+            font-size: 1rem;
+        }
+        
+        footer a {
+            color: #00d4ff;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        footer a:hover {
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.8);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .agent-main {
+                font-size: 4rem;
+                letter-spacing: 10px;
+            }
+            
+            .the-text {
+                font-size: 1.5rem;
+                letter-spacing: 5px;
+            }
+            
+            .tagline {
+                font-size: 1.3rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .rings-container {
+                width: 400px;
+                height: 400px;
+            }
+            
+            .ring1 { width: 400px; height: 400px; }
+            .ring2 { width: 300px; height: 300px; }
+            .ring3 { width: 220px; height: 220px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background elements -->
+    <div class="grid-bg"></div>
+    <div class="scanline"></div>
+    
+    <!-- Corner brackets -->
+    <div class="corner tl"></div>
+    <div class="corner tr"></div>
+    <div class="corner bl"></div>
+    <div class="corner br"></div>
+    
+    <!-- Content -->
+    <div class="content">
+        <!-- Navigation -->
+        <nav>
+            <div class="logo">THINK ALM</div>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#demo">Demo</a>
+                <a href="#pricing">Pricing</a>
+                <a href="#contact">Contact</a>
+            </div>
+        </nav>
+        
+        <!-- Hero Section -->
+        <section class="hero">
+            <!-- Energy rings -->
+            <div class="rings-container">
+                <div class="energy-ring ring1"></div>
+                <div class="energy-ring ring2"></div>
+                <div class="energy-ring ring3"></div>
+                <div class="hexagon"></div>
+            </div>
+            
+            <!-- Logo -->
+            <div class="hero-logo">
+                <div class="the-text">the</div>
+                <h1 class="agent-main">AGENT</h1>
+                <p class="by-think">by Think ALM</p>
+            </div>
+            
+            <p class="tagline">
+                One Widget. Infinite Intelligence.
+            </p>
+            <p class="subtitle">
+                A single line of code that brings AI-powered automation to your website. No complex setup, no integration headaches.
+            </p>
+            <button class="cta-button">Start Free 14-Day Trial</button>
+            
+            <!-- Terminal Demo -->
+            <div class="terminal-demo">
+                <div class="terminal-header">
+                    <div class="terminal-dot"></div>
+                    <div class="terminal-dot"></div>
+                    <div class="terminal-dot"></div>
+                </div>
+                <div class="terminal-content">
+                    <div class="terminal-line">
+                        <span class="terminal-prompt">$</span> installing widget...
+                    </div>
+                    <div class="terminal-line">
+                        <span class="terminal-prompt">></span> &lt;script src="agent.js"&gt;&lt;/script&gt;
+                    </div>
+                    <div class="terminal-line">
+                        <span class="terminal-prompt">></span> Widget initialized... [OK]
+                    </div>
+                    <div class="terminal-line">
+                        <span class="terminal-prompt">></span> Status: LIVE ON YOUR SITE
+                    </div>
+                    <div class="terminal-line">
+                        <span class="terminal-prompt">$</span> <span style="opacity: 0.5;">That's it. Your AI widget is ready.</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Features Section -->
+        <section class="section" id="features">
+            <h2 class="section-title">Core Capabilities</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3 class="feature-title">One-Click Install</h3>
+                    <p class="feature-desc">Copy, paste, done. Embed the widget anywhere on your site in under 30 seconds. No coding required.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🧠</div>
+                    <h3 class="feature-title">Smart AI Assistant</h3>
+                    <p class="feature-desc">Your visitors get instant, intelligent responses. The widget learns from every interaction to serve better.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">💬</div>
+                    <h3 class="feature-title">24/7 Availability</h3>
+                    <p class="feature-desc">Never miss a customer inquiry. The Agent widget works round the clock, handling queries instantly.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🎨</div>
+                    <h3 class="feature-title">Fully Customizable</h3>
+                    <p class="feature-desc">Match your brand perfectly. Customize colors, position, behavior, and responses to fit your site.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3 class="feature-title">Built-in Analytics</h3>
+                    <p class="feature-desc">Track conversations, measure engagement, and understand your visitors better with comprehensive insights.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🚀</div>
+                    <h3 class="feature-title">Zero Maintenance</h3>
+                    <p class="feature-desc">No updates to manage, no servers to maintain. The widget just works, automatically improving over time.</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Footer -->
+        <footer>
+            <p>&copy; 2025 Think ALM. All rights reserved.</p>
+            <p style="margin-top: 1rem;">
+                <a href="#">Documentation</a> | 
+                <a href="#">API</a> | 
+                <a href="#">Support</a>
+            </p>
+        </footer>
+    </div>
+    
+    <script>
+        // Generate floating particles
+        const container = document.body;
+        for (let i = 0; i < 40; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 4 + 's';
+            particle.style.animationDuration = (3 + Math.random() * 4) + 's';
+            container.appendChild(particle);
+        }
+        
+        // Terminal typing animation
+        const terminalLines = document.querySelectorAll('.terminal-line');
+        terminalLines.forEach((line, index) => {
+            line.style.opacity = '0';
+            setTimeout(() => {
+                line.style.transition = 'opacity 0.5s';
+                line.style.opacity = '1';
+            }, index * 500);
+        });
+    </script>
+</body>
+</html>
